@@ -1,6 +1,7 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import { PngPageOutput, pdfToPng } from 'pdf-to-png-converter';
 
+// Getting pdf page function
 export const getPage = async (
   interaction: ChatInputCommandInteraction<CacheType>,
 ) => {
@@ -26,6 +27,7 @@ export const getPage = async (
   });
 };
 
+// Pong answer
 export const pingAndPong = async (
   interaction: ChatInputCommandInteraction<CacheType>,
 ) => {

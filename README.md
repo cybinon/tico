@@ -1,73 +1,117 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+# Tico - Discord Bot 🤖
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Tico is a Discord bot built using NestJS. It provides various features and functionalities to enhance your Discord server experience.
 
-## Installation
+## Table of Contents
 
-```bash
-$ pnpm install
+- [Tico - Discord Bot 🤖](#tico---discord-bot-)
+  - [Description](#description)
+  - [Table of Contents](#table-of-contents)
+  - [Installation 🚀](#installation-)
+  - [Usage 🎮](#usage-)
+  - [Features ✨](#features-)
+  - [Configuration ⚙️](#configuration-️)
+  - [Adding Commands 🛠️](#adding-commands-️)
+  - [Contributing 🤝](#contributing-)
+  - [License 📝](#license-)
+
+## Installation 🚀
+
+Before proceeding with the installation, make sure you have the following prerequisites:
+
+- Node.js (version 18.15.0 or above) 🌟
+- pnpm (version 7.18.1 or above) 🌟
+- Discord bot token (obtain it from the Discord Developer Portal) 🔑
+- Discord application ID (obtain it from the Discord Developer Portal) 🔑
+- NestJS (version 9 or above) 🚀
+
+To install and set up the project, follow these steps:
+
+1. Clone the repository: `git clone https://github.com/cybinon/tico.git`
+2. Navigate to the project directory: `cd tico`
+3. Install the dependencies: `pnpm install`
+4. Create a `.env.local` file in the project root and add the following environment variables:
+
+```ts
+
+DISCORD_BOT_TOKEN=your-discord-bot-token
+DISCORD_APP_ID=your-discord-app-id
+
 ```
 
-## Running the app
 
-```bash
-# development
-$ pnpm run start
+## Usage 🎮
 
-# watch mode
-$ pnpm run start:dev
+To start the Discord bot, use the following command: `pnpm start`
 
-# production mode
-$ pnpm run start:prod
+You can also run the bot in development mode using the command: `pnpm run start:dev`
+
+The bot should now be up and running, and you can invite it to your Discord server using the OAuth2 URL generated from the Discord Developer Portal.
+
+To adding bot your discord server configure this link and open: 
+
+```ts
+
+`https://discord.com/api/oauth2/authorize?client_id=`client id here`&permissions=8&scope=bot`
+
 ```
+![image](https://user-images.githubusercontent.com/56419470/246589488-20da5f46-c74b-481c-8458-7201dac1eb54.png)
 
-## Test
+## Features ✨
 
-```bash
-# unit tests
-$ pnpm run test
+Tico Discord Bot comes with the following features:
 
-# e2e tests
-$ pnpm run test:e2e
+1. **Sending Messages**: The bot provides a convenient method to send messages to specific channels.
 
-# test coverage
-$ pnpm run test:cov
-```
+2. **Initializing Commands**: You can easily initialize and manage custom slash commands using the `initCommands` method provided by the `BotService`.
 
-## Support
+3. **Handling Interactions**: The bot handles chat input commands using the `interactionCreate` event. It automatically routes the interactions to the corresponding action defined in the `commands` array.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Feel free to modify and extend the provided code to implement additional features as per your requirements.
 
-## Stay in touch
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Feel free to customize the bot's features by modifying the code to suit your needs.
 
-## License
+## Configuration ⚙️
 
-Nest is [MIT licensed](LICENSE).
+[**First of all you need create your discord app and get your token. Click Me!**](https://discord.com/developers/applications)
+
+The bot can be configured by modifying the environment variables in the `.env.local` file. The available configuration options are as follows:
+
+- `DISCORD_BOT_TOKEN`: Your Discord bot token obtained from the Discord Developer Portal.
+- `DISCORD_APP_ID`: Your Discord application ID obtained from the Discord Developer Portal.
+
+
+## Adding Commands 🛠️
+
+To add custom commands to the bot, follow these steps:
+
+1. Open the `app.module.ts` file located in the `src` directory.
+2. Locate the `commands` array.
+3. Add your command objects to the array, following this structure:
+
+   ```typescript
+   {
+     name: 'command-name',
+     description: 'Description of the command',
+     action: yourFunctionName,
+   },
+Make sure to replace `'command-name'` with the desired command name, `'Description of the command'` with a brief description of the command, and `yourFunctionName` with the actual name of your function defined in `src/functions.ts`.
+
+4. Save the file and restart the bot if it's already running.
+
+## Contributing 🤝
+
+Contributions are welcome! If you find any bugs or have suggestions for improvement, please open an issue or submit a pull request. Make sure to follow the project's code style and guidelines.
+
+1. Fork the repository.
+2. Create a new branch: `git checkout -b feature/your-feature-name`
+3. Commit your changes: `git commit -m 'Add some feature'`
+4. Push to the branch: `git push origin feature/your-feature-name`
+5. Open a pull request.
+
+## License 📝
+
+This project is licensed under the MIT License. You are free to use, modify, and distribute the code in any way you see fit.
