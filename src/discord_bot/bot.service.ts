@@ -1,17 +1,30 @@
+import { Inject } from '@nestjs/common';
 import {
   ApplicationCommandOptionType,
+  CacheType,
   Client,
+  CommandInteraction,
   GatewayIntentBits,
   REST,
   Routes,
 } from 'discord.js';
-import { PngPageOutput, pdfToPng } from 'pdf-to-png-converter';
+
+export type CommandType = {
+  name: string;
+  description: string;
+  action: (interaction: CommandInteraction<CacheType>) => any;
+  options?: {
+    name: string;
+    description: string;
+    type: ApplicationCommandOptionType;
+    required: boolean;
+  }[];
+};
 
 export class BotService {
-  async onApplicationBootstrap() {
-    this.initCommands();
-    this.discortBotInit();
-  }
+  constructor(
+    @Inject('DISCORD_COMMANDS') private readonly commands: CommandType[],
+  ) {}
   rest = new REST({ version: '10' }).setToken(process.env.DISCORD_BOT_TOKEN);
 
   async sendMessage(channelId: string, message: string) {
@@ -24,29 +37,13 @@ export class BotService {
   }
 
   async initCommands() {
-    const commands = [
-      {
-        name: 'ping',
-        description: 'Replies with Pong!',
-      },
-      {
-        name: 'get',
-        description: 'Getting image',
-        options: [
-          {
-            name: 'page',
-            description: 'Enter your page number',
-            type: ApplicationCommandOptionType.Number,
-            required: true,
-          },
-        ],
-      },
-    ];
     try {
       await this.rest.put(
         Routes.applicationCommands(process.env.DISCORD_APP_ID),
         {
-          body: commands,
+          body: this.commands.map((command) => {
+            return { ...command, action: undefined };
+          }),
         },
       );
       console.log('Successfully reloaded application (/) commands.');
@@ -55,10 +52,14 @@ export class BotService {
     }
   }
 
-  async discortBotInit() {
+  async start() {
     const client = new Client({
       intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
     });
+    const hashCommands = this.commands.reduce((acc, itt) => {
+      acc[itt.name] = itt;
+      return acc;
+    }, {});
 
     client.on('ready', async () => {
       console.log(`Logged in as ${client.user.tag}!`);
@@ -66,32 +67,9 @@ export class BotService {
 
     client.on('interactionCreate', async (interaction) => {
       if (!interaction.isChatInputCommand()) return;
-
-      if (interaction.commandName === 'ping') {
-        await interaction.reply('Pong!');
-      }
-      if (interaction.commandName === 'get') {
-        const selectedPage = parseInt(
-          (interaction.options.get('page')?.value as string) || '1',
-        );
-        const pngPages: PngPageOutput[] = await pdfToPng(
-          './test.pdf', // The function accepts PDF file path or a Buffer
-          {
-            disableFontFace: true,
-            useSystemFonts: false,
-            enableXfa: false,
-            viewportScale: 2.0,
-            outputFileMask: 'buffer',
-            pagesToProcess: [selectedPage],
-            strictPagesToProcess: false,
-            verbosityLevel: 0,
-          },
-        );
-        interaction.reply('Here it is');
-        interaction.channel.send({
-          files: [{ attachment: pngPages[0].content, name: 'manga_page.png' }],
-        });
-      }
+      const command = hashCommands[interaction.commandName];
+      if (command && typeof command.action === 'function')
+        command.action(interaction);
     });
 
     client.login(process.env.DISCORD_BOT_TOKEN);
