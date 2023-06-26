@@ -24,7 +24,10 @@
     "@nestjs/config": "^2.3.2",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
+    "ai": "^2.1.8",
+    "axios": "^1.4.0",
     "discord.js": "^14.11.0",
+    "openai": "^3.3.0",
     "pdf-to-png-converter": "^3.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0"
@@ -53,12 +56,13 @@
     "typescript": "^4.7.4"
   },
   "jest": {
+    "testTimeout": 15000,
     "moduleFileExtensions": [
       "js",
       "json",
       "ts"
     ],
-    "rootDir": "src",
+    "rootDir": ".",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"

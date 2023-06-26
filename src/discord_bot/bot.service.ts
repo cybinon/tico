@@ -1,9 +1,7 @@
 import { Inject } from '@nestjs/common';
 import {
   ApplicationCommandOptionType,
-  CacheType,
   Client,
-  CommandInteraction,
   GatewayIntentBits,
   REST,
   Routes,
@@ -12,7 +10,6 @@ import {
 export type CommandType = {
   name: string;
   description: string;
-  action: (interaction: CommandInteraction<CacheType>) => any;
   options?: {
     name: string;
     description: string;
@@ -24,6 +21,7 @@ export type CommandType = {
 export class BotService {
   constructor(
     @Inject('DISCORD_COMMANDS') private readonly commands: CommandType[],
+    @Inject('FUNCTION_SERVICE') private readonly functions: Record<string, any>,
   ) {}
   rest = new REST({ version: '10' }).setToken(process.env.DISCORD_BOT_TOKEN);
 
@@ -56,10 +54,6 @@ export class BotService {
     const client = new Client({
       intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
     });
-    const hashCommands = this.commands.reduce((acc, itt) => {
-      acc[itt.name] = itt;
-      return acc;
-    }, {});
 
     client.on('ready', async () => {
       console.log(`Logged in as ${client.user.tag}!`);
@@ -67,9 +61,12 @@ export class BotService {
 
     client.on('interactionCreate', async (interaction) => {
       if (!interaction.isChatInputCommand()) return;
-      const command = hashCommands[interaction.commandName];
-      if (command && typeof command.action === 'function')
-        command.action(interaction);
+      if (
+        this.functions &&
+        typeof this.functions[interaction.commandName] === 'function'
+      )
+        this.functions[interaction.commandName](interaction);
+      else interaction.reply('Sry, Command not available right now');
     });
 
     client.login(process.env.DISCORD_BOT_TOKEN);
