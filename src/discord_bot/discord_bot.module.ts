@@ -1,7 +1,10 @@
 import { DynamicModule, Module } from '@nestjs/common';
+import { BotController } from './bot.controller';
 import { BotService, CommandType } from './bot.service';
 
-@Module({})
+@Module({
+  controllers: [BotController],
+})
 export class DiscordBotModule {
   static botService: BotService;
 
