@@ -1,21 +1,19 @@
-# Base image
-FROM node:18
+FROM node:20-slim AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+COPY . /app
+WORKDIR /app
 
-# Create app directory
-WORKDIR /usr/src/app
+FROM base AS prod-deps
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
 
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-COPY package*.json ./
+FROM base AS build
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN pnpm run build
 
-# Install app dependencies
-RUN npm i -g pnpm
-RUN pnpm install
-
-# Bundle app source
-COPY . .
-
-# Creates a "dist" folder with the production build
-RUN pnpm build
-
-# Start the server using the production build
+FROM base
+COPY --from=prod-deps /app/node_modules ./node_modules
+COPY --from=build /app/dist ./dist
+EXPOSE 8000
 CMD [ "node", "dist/main.js" ]
